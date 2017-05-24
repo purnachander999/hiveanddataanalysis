@@ -1,0 +1,102 @@
+1. Start the Hadoop services ( NN,DN,JT,TT and etc..)
+2. Start the Hive from console
+3.  > create database test;
+4.  > use test;
+5. > create tables and load data
+
+
+create table users
+(
+Id  int,
+Reputation string,
+CreationDate string,
+DisplayName string,
+LastAccessDate string,
+WebsiteUrl string,
+Location string,
+AboutMe string,
+Views string,
+UpVotes string,
+DownVotes string,
+Age string,
+AccountId string
+)
+row format serde 'com.ibm.spss.hive.serde2.xml.XmlSerDe'
+with serdeproperties 
+(
+"column.xpath.Id"        = "/row/@Id",
+"column.xpath.Reputation"    = "/row/@Reputation",
+"column.xpath.CreationDate"     = "/row/@CreationDate",
+"column.xpath.DisplayName"    = "/row/@DisplayName",
+"column.xpath.LastAccessDate"        = "/row/@LastAccessDate",
+"column.xpath.WebsiteUrl"    = "/row/@WebsiteUrl",
+"column.xpath.Location"     = "/row/@Location",
+"column.xpath.AboutMe"    = "/row/@AboutMe",
+"column.xpath.Views"        = "/row/@Views",
+"column.xpath.UpVotes"    = "/row/@UpVotes",
+"column.xpath.DownVotes"    = "/row/@DownVotes",
+"column.xpath.Age"    = "/row/@Age",
+"column.xpath.AccountId"    = "/row/@AccountId"
+)
+stored as
+inputformat     'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
+outputformat    'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
+location        '/user/hive/warehouse/test.db/users'
+tblproperties 
+(
+    "xmlinput.start" = "<row"
+   ,"xmlinput.end"   = "/>"
+);
+
+----------------------------------------------USERS TABLE ---------------------------------------------------------------
+
+----------------------------------------------POSTS TABLE ---------------------------------------------------------------
+create table posts
+(
+Id  int,
+PostTypeId string,
+AcceptedAnswerId string,
+CreationDate string,
+Score string,
+ViewCount string,
+Body string,
+OwnerUserId string,
+LastEditorUserId string,
+LastEditDate string,
+LastActivityDate string,
+AnswerCount string,
+FavoriteCount string
+)
+row format serde 'com.ibm.spss.hive.serde2.xml.XmlSerDe'
+with serdeproperties 
+(
+"column.xpath.Id"        = "/row/@Id",
+"column.xpath.PostTypeId"    = "/row/@PostTypeId",
+"column.xpath.AcceptedAnswerId"     = "/row/@AcceptedAnswerId",
+"column.xpath.CreationDate"    = "/row/@CreationDate",
+"column.xpath.Score"        = "/row/@Score",
+"column.xpath.ViewCount"    = "/row/@ViewCount",
+"column.xpath.Body"     = "/row/@Body",
+"column.xpath.OwnerUserId"    = "/row/@OwnerUserId",
+"column.xpath.LastEditorUserId"        = "/row/@LastEditorUserId",
+"column.xpath.LastEditDate"    = "/row/@LastEditDate",
+"column.xpath.LastActivityDate"    = "/row/@LastActivityDate",
+"column.xpath.AnswerCount"    = "/row/@AnswerCount",
+"column.xpath.FavoriteCount"    = "/row/@FavoriteCount"
+)
+stored as
+inputformat     'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
+outputformat    'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
+location        '/user/hive/warehouse/test.db/posts'
+tblproperties 
+(
+    "xmlinput.start" = "<row"
+   ,"xmlinput.end"   = "/>"
+);
+
+
+----------------------------------------------POSTS TABLE ------------------------------------------------------------
+
+
+load data local inpath '/home/<username>/Desktop/DS/Posts.xml' into table posts;
+load data local inpath '/home/<username>/Desktop/DS/Users.xml' into table users;
